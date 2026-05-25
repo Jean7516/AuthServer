@@ -1,0 +1,37 @@
+# ============================================================
+#  application-prod.yml — Perfil PRODUCCIÓN
+#  Todos los valores sensibles vienen de variables de entorno.
+# ============================================================
+
+spring:
+  datasource:
+    url:      ${DATABASE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      pool-name:          HikariPool-Prod
+      maximum-pool-size:  20
+      minimum-idle:       5
+
+  data:
+    redis:
+      host:     ${REDIS_HOST}
+      port:     ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    root:                         WARN
+    com.company.usermanagement:   INFO
+  pattern:
+    console: '{"time":"%d{ISO8601}","level":"%level","logger":"%logger","msg":"%msg"}%n'
+
+# Sin Swagger en producción
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false

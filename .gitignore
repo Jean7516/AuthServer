@@ -1,0 +1,61 @@
+# ─── Build ────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+
+# ─── IDE — IntelliJ IDEA ──────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ─── IDE — VSCode ─────────────────────────────────────────
+.vscode/
+
+# ─── Maven wrapper jar (solo ignorar el binario, no el properties) ──
+.mvn/wrapper/maven-wrapper.jar
+
+# ─── Entorno y secretos ───────────────────────────────────
+# REGLA: ningún archivo .env con valores reales sube al repo
+.env
+docker/.env
+
+# Archivos .env de cualquier subdirectorio
+**/.env
+**/*.env.local
+**/*.env.production
+**/*.env.staging
+
+# Solo el ejemplo de referencia SÍ sube al repo
+!.env.example
+!docker/.env.example
+!**/.env.example
+
+# Cualquier archivo con "secret" o "credentials" en el nombre
+*secret*
+*credentials*
+*secrets*
+
+# ─── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── OS ───────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ─── Testcontainers cache ─────────────────────────────────
+.testcontainers.properties
+
+# ─── Spring Boot devtools ─────────────────────────────────
+spring-devtools.properties
+CLAUDE.md
+Context.md
+README.md

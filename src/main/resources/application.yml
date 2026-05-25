@@ -1,0 +1,82 @@
+# ============================================================
+#  application.yml — Configuración base (todos los perfiles)
+#  Cada perfil sobreescribe solo lo que cambia.
+# ============================================================
+
+spring:
+  application:
+    name: user-management
+
+  # Perfil activo por defecto en local
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ─── Jackson ──────────────────────────────────────────────
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # ─── JPA / Hibernate ──────────────────────────────────────
+  jpa:
+    open-in-view: false          # Evita lazy loading fuera de la transacción
+    hibernate:
+      ddl-auto: validate         # Flyway gestiona el esquema; Hibernate solo valida
+    properties:
+      hibernate:
+        dialect:              org.hibernate.dialect.PostgreSQLDialect
+        format_sql:           false
+        default_schema:       auth   # Trabaja sobre el schema auth por defecto
+
+  # ─── Flyway ───────────────────────────────────────────────
+  flyway:
+    enabled:           true
+    schemas:           auth, audit
+    locations:         classpath:db/migration
+    baseline-on-migrate: true
+
+  # ─── Cache ────────────────────────────────────────────────
+  cache:
+    type: redis
+
+  # ─── Lifecycle ────────────────────────────────────────────
+  lifecycle:
+    timeout-per-shutdown-phase: 30s   # Graceful shutdown
+
+# ─── Servidor ─────────────────────────────────────────────────
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  servlet:
+    context-path: /api
+  compression:
+    enabled:      true
+    mime-types:   application/json
+    min-response-size: 2048
+
+# ─── Actuator ─────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, flyway
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    env:
+      enabled: true
+
+# ─── Propiedades de la aplicación ─────────────────────────────
+app:
+  jwt:
+    secret:               ${JWT_SECRET:LOCAL_DEV_SECRET_CHANGE_IN_PROD_MIN_32_CHARS}
+    access-token-expiry:  15m
+    refresh-token-expiry: 7d
+  security:
+    bcrypt-strength:      12
+    max-login-attempts:   5
+    lockout-duration:     15m

@@ -1,0 +1,65 @@
+# ============================================================
+#  application-dev.yml — Perfil LOCAL
+#  Solo se activa con: SPRING_PROFILES_ACTIVE=dev
+# ============================================================
+
+spring:
+
+  # ─── PostgreSQL (apunta al contenedor Docker) ─────────────
+  datasource:
+    url:                jdbc:postgresql://localhost:5432/user_management_db?currentSchema=auth
+    username:           um_user
+    password:           um_secret_dev_only
+    driver-class-name:  org.postgresql.Driver
+    hikari:
+      pool-name:             HikariPool-Dev
+      maximum-pool-size:     5
+      minimum-idle:          2
+      connection-timeout:    30000
+      idle-timeout:          600000
+      max-lifetime:          1800000
+      connection-test-query: SELECT 1
+
+  # ─── Redis (apunta al contenedor Docker) ──────────────────
+  data:
+    redis:
+      host:     localhost
+      port:     6379
+      password: redis_secret_dev_only
+      timeout:  2000ms
+      lettuce:
+        pool:
+          max-active:  8
+          max-idle:    4
+          min-idle:    1
+
+  # ─── SQL en consola (solo dev) ────────────────────────────
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# ─── Logs en dev: nivel DEBUG para la app, INFO para libs ─────
+logging:
+  level:
+    com.company.usermanagement: DEBUG
+    org.springframework.security: DEBUG
+    org.flywaydb:                 INFO
+    org.hibernate.SQL:            DEBUG
+    org.hibernate.orm.jdbc.bind:  TRACE   # muestra parámetros de los queries
+  pattern:
+    console: "%clr(%d{HH:mm:ss}){faint} %clr(%-5level) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} : %m%n"
+
+# ─── Swagger UI accesible en dev ──────────────────────────────
+springdoc:
+  swagger-ui:
+    path:              /swagger-ui.html
+    operations-sorter: method
+  api-docs:
+    path: /v3/api-docs
+
+  # ─── Flyway dev: repara checksums automáticamente ─────────
+  flyway:
+    repair-on-migrate: true   # sincroniza checksums si el script cambió
+    out-of-order: false
