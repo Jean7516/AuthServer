@@ -9,7 +9,7 @@ spring:
   datasource:
     url:                jdbc:postgresql://localhost:5432/user_management_db?currentSchema=auth
     username:           um_user
-    password:           um_secret_dev_only
+    password:           um_password
     driver-class-name:  org.postgresql.Driver
     hikari:
       pool-name:             HikariPool-Dev
