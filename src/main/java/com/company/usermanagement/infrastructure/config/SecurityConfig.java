@@ -55,7 +55,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_POST = {
         "/auth/login",
         "/auth/register",
-        "/auth/refresh"
+        "/auth/refresh",
     };
 
     private static final String[] PUBLIC_GET = {
