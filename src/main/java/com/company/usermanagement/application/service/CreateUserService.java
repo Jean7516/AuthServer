@@ -37,11 +37,12 @@ public class CreateUserService implements CreateUserUseCase {
 
     private static final String DEFAULT_ROLE = "viewer";
 
-    private final UserRepositoryPort    userRepository;
-    private final RoleRepositoryPort    roleRepository;
+    private final UserRepositoryPort     userRepository;
+    private final RoleRepositoryPort     roleRepository;
     private final PasswordHashingService passwordHashingService;
-    private final EmailNotificationPort emailNotification;
-    private final AuditPort             audit;
+    private final EmailNotificationPort  emailNotification;
+    private final AuditPort              audit;
+    private final UserResponseMapper     userResponseMapper;
 
     @Override
     @Transactional
@@ -90,7 +91,7 @@ public class CreateUserService implements CreateUserUseCase {
         );
 
         log.info("Usuario creado exitosamente: {} con rol '{}'", saved.getId(), roleName);
-        return UserResponse.from(saved);
+        return userResponseMapper.toResponse(saved);
     }
 
     private String generateVerificationToken(User user) {

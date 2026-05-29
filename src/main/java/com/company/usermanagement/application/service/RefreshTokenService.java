@@ -26,6 +26,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
     private final TokenRepositoryPort tokenRepository;
     private final UserRepositoryPort  userRepository;
     private final JwtService          jwtService;
+    private final UserResponseMapper  userResponseMapper;
 
     @Override
     @Transactional
@@ -66,6 +67,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
         return AuthResponse.of(newAccessToken, newRefreshToken,
                                jwtService.getAccessTokenExpiry(),
-                               UserResponse.from(user), permissions);
+                               userResponseMapper.toResponse(user), permissions);
     }
 }

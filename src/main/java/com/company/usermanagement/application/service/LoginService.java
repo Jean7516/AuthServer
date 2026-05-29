@@ -32,6 +32,7 @@ public class LoginService implements LoginUseCase {
     private final PasswordHashingService passwordHashingService;
     private final JwtService             jwtService;
     private final AuditPort              audit;
+    private final UserResponseMapper     userResponseMapper;
 
     @Override
     @Transactional
@@ -76,6 +77,6 @@ public class LoginService implements LoginUseCase {
 
         log.info("Login exitoso para userId: {}", user.getId());
         return AuthResponse.of(accessToken, refreshToken, expiresAt,
-                               UserResponse.from(user), permissions);
+                               userResponseMapper.toResponse(user), permissions);
     }
 }

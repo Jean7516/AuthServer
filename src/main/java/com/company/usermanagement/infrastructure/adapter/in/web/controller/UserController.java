@@ -26,6 +26,7 @@ public class UserController {
     private final DeleteUserUseCase     deleteUserUseCase;
     private final AssignRoleUseCase     assignRoleUseCase;
     private final RevokeRoleUseCase     revokeRoleUseCase;
+    private final ClearRolesUseCase     clearRolesUseCase;
 
     @GetMapping
     @PreAuthorize("hasAuthority('PERMISSION_users.read')")
@@ -84,9 +85,18 @@ public class UserController {
             ));
     }
 
+    @DeleteMapping("/{id}/roles")
+    @PreAuthorize("hasAuthority('PERMISSION_roles.manage')")
+    @Operation(summary = "Revocar todos los roles efectivos de un usuario")
+    public ApiResponse<UserResponse> clearRoles(@PathVariable String id) {
+        String actorId = SecurityUtils.getCurrentUserIdOrThrow().toString();
+        return ApiResponse.ok("Roles revocados correctamente",
+            clearRolesUseCase.execute(id, actorId));
+    }
+
     @DeleteMapping("/{id}/roles/{roleName}")
     @PreAuthorize("hasAuthority('PERMISSION_roles.manage')")
-    @Operation(summary = "Revocar un rol de un usuario")
+    @Operation(summary = "Revocar un rol específico de un usuario")
     public ApiResponse<UserResponse> revokeRole(
             @PathVariable String id,
             @PathVariable String roleName) {
